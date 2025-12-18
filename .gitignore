@@ -1,0 +1,63 @@
+# Django #
+############
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+.DS_Store
+
+# Environment variables - CRITICAL #
+.env
+.env.local
+.env.production
+.env.development
+.env.*
+secrets.json
+
+# Virtual Environment - CRITICAL #
+venv/
+ENV/
+env/
+virtualenv/
+venv.bak/
+
+# IDE & Editor #
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# OS generated files #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Static & Media files at build time #
+/staticfiles/
+/media/
+/static/
+
+# Deployment & Database #
+datadump.json
+*.backup
+*.dump
+*.pid
+*.socket
+del  # From your original file list
+
+# Coverage reports #
+.coverage
+htmlcov/
+.pytest_cache/
+
