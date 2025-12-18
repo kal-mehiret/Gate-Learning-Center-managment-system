@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Assign Grade – {{ student.username }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 30px auto; padding: 0 20px;">
+    
+    <div style="text-align:center; margin-bottom:30px;">
+        <div style="width:50px; height:50px; margin:0 auto 12px; background:linear-gradient(135deg,#e8f0f7,#f0f4f8); border-radius:50%; display:flex; align-items:center; justify-content:center;">
+            <i class="fas fa-graduation-cap" style="font-size:1.5rem; color:#6c8ea4;"></i>
+        </div>
+        <h1 style="font-size:1.6rem; font-weight:700; color:#2c3e50; margin-bottom:8px;">Assign Grade</h1>
+        <p style="color:#5d6d7e; font-size:0.95rem;">
+            For <strong>{{ student.username }}</strong> in <strong>{{ course.name }}</strong>
+        </p>
+    </div>
+    
+    
+    <div style="background:white; border-radius:12px; padding:25px; box-shadow:0 4px 12px rgba(108,142,164,0.05); border:1px solid #e2e8f0;">
+        <form method="post">
+            {% csrf_token %}
+            
+            
+            <div style="background:#f8fafc; border-radius:10px; padding:15px; margin-bottom:25px; border:1px solid #e2e8f0;">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                    <div style="width:40px; height:40px; background:linear-gradient(135deg,#e8f0f7,#f0f4f8); border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                        <i class="fas fa-user" style="color:#6c8ea4; font-size:0.9rem;"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size:1.1rem; font-weight:600; color:#2c3e50; margin:0;">{{ student.get_full_name|default:student.username }}</h3>
+                        <p style="color:#5d6d7e; font-size:0.85rem; margin:3px 0 0 0;">Student ID: {{ student.username }}</p>
+                    </div>
+                </div>
+                <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:140px;">
+                        <p style="color:#5d6d7e; font-size:0.85rem; margin:0 0 4px 0;">Course</p>
+                        <p style="font-weight:600; color:#2c3e50; margin:0; font-size:0.95rem;">{{ course.name }}</p>
+                    </div>
+                    <div style="flex:1; min-width:140px;">
+                        <p style="color:#5d6d7e; font-size:0.85rem; margin:0 0 4px 0;">Course Code</p>
+                        <p style="font-weight:600; color:#2c3e50; margin:0; font-size:0.95rem;">{{ course.code }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div style="margin-bottom:25px;">
+                <label style="display:block; margin-bottom:8px; font-weight:600; color:#2c3e50; font-size:0.95rem;">
+                    <i class="fas fa-percentage" style="margin-right:6px; font-size:0.9rem;"></i> Score
+                </label>
+                <input type="number" name="score" value="{{ grade.score|default:'' }}" 
+                       style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.95rem; transition:all 0.3s ease; background:#f8fafc;"
+                       placeholder="Enter score (0-100)" min="0" max="100" step="0.01" required>
+                <p style="color:#5d6d7e; font-size:0.85rem; margin-top:6px;">Enter a score between 0 and 100</p>
+            </div>
+            
+            
+            <div style="margin-bottom:30px;">
+                <label style="display:block; margin-bottom:8px; font-weight:600; color:#2c3e50; font-size:0.95rem;">
+                    <i class="fas fa-comment" style="margin-right:6px; font-size:0.9rem;"></i> Remark
+                </label>
+                <textarea name="remark" rows="4"
+                          style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:8px; font-size:0.95rem; transition:all 0.3s ease; background:#f8fafc; font-family:'Inter', sans-serif;"
+                          placeholder="Add any comments or feedback for the student">{{ grade.remark|default:'' }}</textarea>
+                <p style="color:#5d6d7e; font-size:0.85rem; margin-top:6px;">Optional: Provide additional feedback for the student</p>
+            </div>
+            
+            
+            <div style="display:flex; gap:12px; margin-top:25px; padding-top:15px; border-top:1px solid #e2e8f0;">
+                <button type="submit" class="btn btn--primary" style="flex:1; padding:12px; font-size:0.95rem;">
+                    <i class="fas fa-save" style="font-size:0.9rem;"></i> Save Grade
+                </button>
+                <a href="{% url 'instructor_grades' course.code %}" class="btn" style="flex:1; padding:12px; background:#f8fafc; color:#5d6d7e; border:1px solid #e2e8f0; text-align:center; text-decoration:none; border-radius:8px; font-weight:600; font-size:0.95rem;">
+                    <i class="fas fa-times" style="font-size:0.9rem;"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Consistent with base.html styling - Smaller */
+    input, textarea, select {
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #2c3e50;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: #6c8ea4 !important;
+        background: white !important;
+        box-shadow: 0 0 0 3px rgba(108, 142, 164, 0.15) !important;
+    }
+    
+    input:hover, textarea:hover, select:hover {
+        border-color: #8aa2b8 !important;
+    }
+    
+    /* Button styling - Smaller */
+    .btn {
+        padding: 8px 18px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: none;
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .btn--primary {
+        background: linear-gradient(135deg, #6c8ea4, #5a7a94);
+        color: white;
+        border: none;
+        box-shadow: 0 3px 10px rgba(108, 142, 164, 0.2);
+    }
+    
+    .btn--primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 142, 164, 0.3);
+        background: linear-gradient(135deg, #5a7a94, #4a6a84);
+    }
+    
+    /* Cancel button styling - Smaller */
+    a.btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(108, 142, 164, 0.1);
+        background: #f1f5f9 !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 15px !important;
+        }
+        
+        div[style*="display:flex; gap:15px; flex-wrap:wrap;"] {
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+        
+        div[style*="display:flex; gap:12px;"] {
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+        
+        button, a.btn {
+            width: 100% !important;
+        }
+    }
+</style>
+{% endblock %}

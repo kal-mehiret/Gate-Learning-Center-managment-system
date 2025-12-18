@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Gate Computer Training Center{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{
+            font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color:#10203a;
+            background: #f9fbff;
+            display:flex;
+            flex-direction:column;
+            min-height:100vh;
+            line-height:1.6;
+        }
+        .container{ max-width:1200px; margin:auto; padding:0 20px; width:100%; }
+
+        /* HEADER */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            padding: 16px 0;
+            border-bottom: none;
+            transition: all 0.3s ease;
+        }
+        body { padding-top: 80px; }
+        .header-content { display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon {
+            font-size: 1.8rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6c8ea4, #8aa2b8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(108, 142, 164, 0.2);
+        }
+        .logo h1 { font-size: 1.25rem; font-weight: 700; color: #2c3e50; letter-spacing: -0.5px; }
+
+        .nav-bar { display: flex; align-items: center; gap: 12px; }
+        .btn {
+            padding: 10px 22px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: inherit;
+            box-shadow: 0 4px 15px rgba(108, 142, 164, 0.2);
+        }
+        .btn--primary {
+            background: linear-gradient(135deg, #6c8ea4, #5a7a94);
+            color: white;
+            border: none;
+        }
+        .btn--primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 142, 164, 0.3);
+            background: linear-gradient(135deg, #5a7a94, #4a6a84);
+        }
+        .btn-logout {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+        }
+        .btn-logout:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            position: relative;
+            padding: 100px 0 120px;
+            color: white;
+            overflow: hidden;
+            background: 
+                linear-gradient(rgba(108, 142, 164, 0.75), rgba(90, 122, 148, 0.8)),
+                url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            text-align: center;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(108, 142, 164, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(138, 162, 184, 0.1) 0%, transparent 50%);
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .hero-subtitle { font-size: 1.25rem; opacity: 0.95; max-width: 700px; margin: 0 auto 40px; font-weight: 400; line-height: 1.6; text-shadow: 0 1px 5px rgba(0,0,0,0.2); }
+        .floating-image-container { margin: 40px auto; max-width: 600px; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25); position: relative; z-index: 2; }
+        .floating-image { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
+        .floating-image:hover { transform: scale(1.03); }
+        .btn-cta {
+            padding: 16px 36px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6c8ea4, #5a7a94);
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(108,142,164,0.25);
+            text-decoration: none;
+            margin-top: 30px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-size: 1.05rem;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-cta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(108,142,164,0.35);
+            background: linear-gradient(135deg, #5a7a94, #4a6a84);
+        }
+
+        /* WHY LEARN SECTION */
+        .why-learn-section { padding: 80px 0; background: white; text-align: center; }
+        .section-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; color: #2c3e50; }
+        .section-subtitle { font-size: 1.1rem; color: #5d6d7e; max-width: 700px; margin: 0 auto 50px; }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 50px; }
+        .feature-card { padding: 26px 20px; border-radius: 16px; background: linear-gradient(135deg,#f8fafc,#f1f5f9); border: 1px solid #e2e8f0; text-align: center; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(108,142,164,0.05); }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(108,142,164,0.1); border-color:#8aa2b8; background: linear-gradient(135deg,#f8fafc,#e8f0f7);}
+        .feature-icon { font-size: 2.2rem; margin-bottom: 15px; color: #6c8ea4; background: linear-gradient(135deg,#e8f0f7,#f0f4f8); width: 70px; height: 70px; line-height: 70px; border-radius: 50%; margin: 0 auto 15px; }
+        .feature-card h3 { font-size: 1.3rem; margin-bottom: 12px; color:#2c3e50;}
+        .feature-card p { color:#5d6d7e; font-size:0.95rem; }
+
+        /* ABOUT SECTION */
+        .about-section { padding:80px 0; background: linear-gradient(135deg,#f8fafc,#f1f5f9); text-align:center; }
+        .about-text { display:inline-block; padding:40px 30px; background:white; border-radius:20px; box-shadow:0 10px 25px rgba(108,142,164,0.1); max-width:800px; width:100%; color:#2c3e50; line-height:1.7; font-size:1.1rem; transition: all 0.3s ease; }
+        .about-text:hover { transform: translateY(-5px); box-shadow:0 15px 35px rgba(108,142,164,0.15); }
+
+        /* FOOTER */
+        .footer { background: linear-gradient(180deg,#5a7a94,#4a6a84); color:white; padding:50px 0 30px; margin-top:auto; }
+        .footer-content { display:flex; flex-wrap:wrap; gap:40px; justify-content:space-between; margin-bottom:40px; }
+        .footer-section { flex:1; min-width:250px; }
+        .footer-section h3 { color:white; margin-bottom:20px; font-size:1.3rem; }
+        .footer-section p, .footer-section a { margin-bottom:10px; display:block; color:rgba(255,255,255,0.8); text-decoration:none; transition: color 0.2s; }
+        .footer-section a:hover { color:white; }
+        .footer-section i { margin-right:10px; width:20px; text-align:center; }
+        .footer-bottom { text-align:center; padding-top:30px; border-top:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.7); font-size:0.9rem; }
+
+        /* RESPONSIVE - MOBILE IMPROVEMENTS */
+        @media (max-width:992px){
+            .features-grid{grid-template-columns:repeat(2,1fr)} 
+            .hero-title{font-size:3rem}
+        }
+        
+        @media (max-width:768px){
+            .hero-title{font-size:2.5rem}
+            .hero-subtitle{font-size:1.1rem}
+            .section-title{font-size:2rem}
+            .nav-bar{gap:8px}
+            .btn{padding:10px 18px; font-size:0.9rem; min-height:44px}
+            .floating-image-container{margin:30px auto; max-width:90%}
+            .features-grid{grid-template-columns:1fr; gap:20px}
+        }
+        
+        @media (max-width:600px){
+            .header-content{
+                flex-direction:column;
+                gap:15px;
+                align-items:stretch;
+            }
+            .logo{
+                align-self:center;
+                text-align:center;
+                justify-content:center;
+            }
+            .nav-bar{
+                width:100%;
+                justify-content:center;
+                flex-wrap:wrap;
+                gap:10px;
+            }
+            .btn{
+                padding:12px 20px;
+                font-size:0.95rem;
+            }
+            .btn-cta{
+                padding:16px 30px;
+                font-size:1rem;
+            }
+        }
+        
+        @media (max-width:480px){
+            .hero-title{font-size:2rem; padding:0 10px; line-height:1.2}
+            .hero-subtitle{font-size:1rem; padding:0 15px}
+            .features-grid{grid-template-columns:1fr; gap:16px}
+            .logo h1{font-size:1.1rem}
+            .logo-icon{width:40px; height:40px; font-size:1.6rem}
+            .btn-cta{padding:14px 28px; font-size:1rem; min-height:50px}
+            .btn{padding:12px 18px; font-size:0.9rem; min-height:46px}
+            .feature-card{padding:20px 15px}
+            .feature-icon{width:60px; height:60px; line-height:60px; font-size:1.8rem}
+            .footer-content{gap:30px}
+            .footer-section{min-width:100%}
+        }
+        
+        @media (max-width:360px){
+            .hero-title{font-size:1.8rem}
+            .hero-subtitle{font-size:0.95rem}
+            .nav-bar{gap:6px}
+            .btn{padding:10px 14px; font-size:0.85rem}
+            .logo h1{font-size:1rem}
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="main-header">
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">
+                <a href="{% url 'home' %}" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+                    <i class="fas fa-graduation-cap logo-icon"></i>
+                    <h1>Gate Computer Training Center</h1>
+                </a>
+            </div>
+            <div class="nav-bar">
+                
+                {% url 'course_list' as course_list_url %}
+                <a href="{{ course_list_url }}" class="btn btn--primary">
+                    <i class="fas fa-book-open"></i> View All Courses
+                </a>
+                
+                {% if user.is_authenticated %}
+                    
+                    {% if user.profile.role == 'student' %}
+                        <a href="{% url 'student_dashboard' %}" class="btn btn--primary">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    {% elif user.profile.role == 'instructor' %}
+                        <a href="{% url 'instructor_dashboard' %}" class="btn btn--primary">
+                            <i class="fas fa-chalkboard-teacher"></i> Dashboard
+                        </a>
+                    {% elif user.profile.role == 'admin' %}
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn--primary">
+                            <i class="fas fa-user-shield"></i> Dashboard
+                        </a>
+                    {% endif %}
+                    
+                    
+                    <form action="{% url 'logout' %}" method="post" style="margin: 0; display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-logout">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                    
+                {% else %}
+                    
+                    <a href="{% url 'login' %}" class="btn btn--primary">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+    {% if messages %}
+    <div class="container">
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% block content %}
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Unlock Your Potential with Gate.<br>Achieve Your Dreams.</h1>
+                <p class="hero-subtitle">
+                    Discover expert-led courses in programming, data science, cybersecurity, and more. Your journey to a brighter future starts here.
+                </p>
+                <div class="floating-image-container">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80" 
+                         alt="Group study session" class="floating-image">
+                </div>
+                <a href="{{ course_list_url|default:'#' }}" class="btn-cta">
+                    <i class="fas fa-rocket"></i> Explore Courses
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY LEARN SECTION -->
+    <section class="why-learn-section">
+        <div class="container">
+            <h2 class="section-title">Why Learn With Gate?</h2>
+            <p class="section-subtitle">
+                Experience the best computer training with modern facilities and expert instructors.
+            </p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-desktop feature-icon"></i>
+                    <h3>Modern Labs</h3>
+                    <p>Latest equipment + software for hands-on learning</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chalkboard-teacher feature-icon"></i>
+                    <h3>Expert Instructors</h3>
+                    <p>Learn from real industry professionals with years of experience</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-book feature-icon"></i>
+                    <h3>Comprehensive Curriculum</h3>
+                    <p>From basics to advanced coding, covering all skill levels</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-certificate feature-icon"></i>
+                    <h3>Certification</h3>
+                    <p>Get recognized certificates to boost your career prospects</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section">
+        <div class="container">
+            <h2 class="section-title">About Gate Computer Training Center</h2>
+            <p class="about-text">
+                At Gate Computer Training Center, we're committed to providing high-quality, practical computer education that prepares you for the tech industry. With expert instructors, modern facilities, and a comprehensive curriculum, we help you build the skills needed to succeed in today's digital world. Join thousands of successful graduates who have transformed their careers with us.
+            </p>
+        </div>
+    </section>
+    {% endblock %}
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Gate Computer Training Center</h3>
+                <p>Providing quality computer education since 2010</p>
+                <p>Building future tech professionals</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Addis Ababa, Ethiopia</p>
+                <p><i class="fas fa-phone"></i> +251 900 000 000</p>
+                <p><i class="fas fa-envelope"></i> info@gatetraining.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{{ course_list_url|default:'#' }}">Courses</a>
+                {% if user.is_authenticated %}
+                    {% if user.profile.role == 'student' %}
+                        <a href="{% url 'student_dashboard' %}">Dashboard</a>
+                    {% elif user.profile.role == 'instructor' %}
+                        <a href="{% url 'instructor_dashboard' %}">Dashboard</a>
+                    {% elif user.profile.role == 'admin' %}
+                        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+                    {% endif %}
+                    <a href="#" onclick="document.querySelector('form[action*=\"logout\"] button').click(); return false;">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © {% now "Y" %} Gate Computer Training Center — All Rights Reserved
+        </div>
+    </div>
+</footer>
+
+<script>
+   
+    window.addEventListener('scroll', function() {
+        const header = document.querySelector('.main-header');
+        if (window.scrollY > 50) {
+            header.style.padding = '12px 0';
+            header.style.boxShadow = '0 6px 20px rgba(0,0,0,0.1)';
+        } else {
+            header.style.padding = '16px 0';
+            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.08)';
+        }
+    });
+</script>
+
+</body>
+</html>

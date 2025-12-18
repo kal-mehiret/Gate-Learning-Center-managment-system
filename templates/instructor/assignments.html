@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Assignments – {{ course.name }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; margin: 30px auto; padding: 0 20px;">
+    
+    <div style="margin-bottom: 30px;">
+        <h1 style="font-size: 1.8rem; font-weight: 700; color: #2c3e50; margin: 0 0 5px 0;">
+            <i class="fas fa-tasks" style="color: #6c8ea4; margin-right: 8px; font-size: 1.5rem;"></i>Assignments – {{ course.name }}
+        </h1>
+        <p style="color: #5d6d7e; font-size: 0.95rem; margin: 0;">Manage assignments for your course</p>
+    </div>
+
+    
+    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(108,142,164,0.05); border: 1px solid #e2e8f0; margin-bottom: 30px;">
+        <h2 style="font-size: 1.3rem; font-weight: 700; color: #2c3e50; margin: 0 0 20px 0;">
+            <i class="fas fa-plus" style="color: #6c8ea4; margin-right: 8px; font-size: 1.3rem;"></i>Create New Assignment
+        </h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div style="background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ffcdd2; font-size: 0.9rem;">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn--primary" style="padding: 10px 22px; font-size: 0.95rem; margin-top: 15px;">
+                <i class="fas fa-plus-circle" style="font-size: 0.95rem;"></i> Create Assignment
+            </button>
+        </form>
+    </div>
+
+    
+    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(108,142,164,0.05); border: 1px solid #e2e8f0;">
+        <h2 style="font-size: 1.3rem; font-weight: 700; color: #2c3e50; margin: 0 0 20px 0;">
+            <i class="fas fa-list-alt" style="color: #6c8ea4; margin-right: 8px; font-size: 1.3rem;"></i>Existing Assignments
+        </h2>
+
+        {% if assignments %}
+            <ul style="list-style: none; padding: 0;">
+                {% for assignment in assignments %}
+                    <li style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-radius: 10px; padding: 15px; margin-bottom: 12px; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                        <strong style="font-size: 1rem; color: #2c3e50; display: block; margin-bottom: 8px; font-weight: 600;">{{ assignment.title }}</strong>
+                        
+                        <div style="color: #5d6d7e; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; font-size: 0.9rem;">
+                            <i class="fas fa-calendar-alt" style="font-size: 0.9rem;"></i>
+                            <span>Due: {{ assignment.due_date }}</span>
+                        </div>
+
+                        {% if assignment.description %}
+                            <div style="color: #5d6d7e; margin-bottom: 10px; line-height: 1.5; font-size: 0.9rem;">
+                                {{ assignment.description }}
+                            </div>
+                        {% endif %}
+
+                        {% if assignment.file %}
+                            <div style="margin-top: 10px;">
+                                <a href="{{ assignment.file.url }}" target="_blank" 
+                                   style="display: inline-flex; align-items: center; gap: 6px; background: #e3f2fd; color: #1565c0; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; transition: all 0.3s ease;">
+                                    <i class="fas fa-paperclip" style="font-size: 0.85rem;"></i> Download Attachment
+                                </a>
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div style="text-align: center; padding: 30px; color: #5d6d7e;">
+                <i class="fas fa-clipboard-list" style="font-size: 2rem; margin-bottom: 12px; opacity: 0.3;"></i>
+                <p style="font-size: 1rem;">No assignments yet.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    
+    <div style="margin-top: 30px;">
+        <a href="{% url 'instructor_dashboard' %}" class="btn" 
+           style="background: #f8fafc; color: #5d6d7e; border: 1px solid #e2e8f0; padding: 10px 20px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease;">
+            <i class="fas fa-arrow-left" style="font-size: 0.9rem;"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Form styling - Smaller */
+    form p {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.9rem;
+    }
+    
+    input, textarea, select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #2c3e50;
+        background: #f8fafc;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: #6c8ea4;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(108, 142, 164, 0.15);
+    }
+    
+    /* Button styling - Smaller */
+    .btn {
+        padding: 8px 18px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: none;
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .btn--primary {
+        background: linear-gradient(135deg, #6c8ea4, #5a7a94);
+        color: white;
+        border: none;
+        box-shadow: 0 3px 10px rgba(108, 142, 164, 0.2);
+    }
+    
+    .btn--primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 142, 164, 0.3);
+        background: linear-gradient(135deg, #5a7a94, #4a6a84);
+    }
+    
+    /* List item hover effect - Smaller */
+    li:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 142, 164, 0.15);
+        border-color: #8aa2b8;
+    }
+    
+    /* Download link hover - Smaller */
+    a[href*="download"]:hover {
+        background: #1565c0 !important;
+        color: white !important;
+        transform: translateY(-1px);
+    }
+    
+    /* Back button hover - Smaller */
+    a.btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(108, 142, 164, 0.1);
+        background: #f1f5f9 !important;
+    }
+</style>
+{% endblock %}

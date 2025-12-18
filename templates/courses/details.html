@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+  
+    <div style="margin-bottom: 40px;">
+        <h1 style="font-size: 2.2rem; font-weight: 700; color: #2c3e50; margin: 0 0 8px 0;">
+            <i class="fas fa-book" style="color: #6c8ea4; margin-right: 10px;"></i>Course Details
+        </h1>
+        <p style="color: #5d6d7e; font-size: 1.1rem; margin: 0;">Complete information about this course</p>
+    </div>
+
+  
+    <div style="background: white; border-radius: 16px; padding: 30px; box-shadow: 0 5px 20px rgba(108,142,164,0.08); border: 1px solid #e2e8f0; margin-bottom: 30px;">
+        
+        <div style="display: flex; align-items: flex-start; gap: 25px; margin-bottom: 25px;">
+            
+            <div style="width: 120px; height: 120px; flex-shrink: 0; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;">
+                {% if course.image %}
+                    <img src="{{ course.image.url }}" alt="{{ course.name }}" 
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #e8f0f7, #f0f4f8); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-book-open" style="font-size: 2.5rem; color: #6c8ea4;"></i>
+                    </div>
+                {% endif %}
+            </div>
+            
+            
+            <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; font-weight: 700; color: #2c3e50; margin: 0 0 10px 0;">{{ course.name }}</h2>
+                        <span style="background: #f0f7ff; color: #1565c0; padding: 5px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">
+                            {{ course.code }}
+                        </span>
+                    </div>
+                    <div style="font-weight: 700; color: #2e7d32; font-size: 1.5rem;">
+                        ${{ course.fee }}
+                    </div>
+                </div>
+                
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <div style="color: #5d6d7e;">
+                        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 5px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-user-tie" style="color: #6c8ea4;"></i> Instructor
+                        </div>
+                        <div>{{ course.instructor }}</div>
+                    </div>
+                    
+                    <div style="color: #5d6d7e;">
+                        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 5px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-clock" style="color: #6c8ea4;"></i> Duration
+                        </div>
+                        <div>{{ course.duration }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div style="background: white; border-radius: 16px; padding: 30px; box-shadow: 0 5px 20px rgba(108,142,164,0.08); border: 1px solid #e2e8f0; margin-bottom: 40px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #e8f0f7, #f0f4f8); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-file-alt" style="font-size: 1.2rem; color: #6c8ea4;"></i>
+            </div>
+            <h3 style="font-size: 1.4rem; font-weight: 700; color: #2c3e50; margin: 0;">Course Description</h3>
+        </div>
+        
+        <div style="color: #5d6d7e; line-height: 1.7; font-size: 1.1rem;">
+            <p>{{ course.description|linebreaks }}</p>
+        </div>
+    </div>
+
+    
+    <div style="text-align: center; border-top: 1px solid #e2e8f0; padding-top: 30px;">
+        <a href="{% url 'course_list' %}" 
+           style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #6c8ea4, #5a7a94); color: white; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 1rem; transition: all 0.3s ease;">
+            <i class="fas fa-arrow-left"></i> Back to Courses
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Button hover effects */
+    a[href*="course_list"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(108, 142, 164, 0.3);
+        background: linear-gradient(135deg, #5a7a94, #4a6a84) !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 15px !important;
+        }
+        
+        div[style*="display: flex; align-items: flex-start; gap: 25px;"] {
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+        }
+        
+        div[style*="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));"] {
+            grid-template-columns: 1fr !important;
+        }
+        
+        div[style*="display: flex; justify-content: space-between;"] {
+            flex-direction: column !important;
+            gap: 15px !important;
+        }
+    }
+</style>
+{% endblock %}

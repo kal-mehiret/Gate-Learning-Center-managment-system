@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+        <div>
+            <h1 style="font-size: 2.2rem; font-weight: 700; color: #2c3e50; margin: 0 0 8px 0;">
+                <i class="fas fa-user-graduate" style="color: #6c8ea4; margin-right: 10px;"></i>My Learning Dashboard
+            </h1>
+            <p style="color: #5d6d7e; font-size: 1.1rem; margin: 0;">Access your enrolled courses and learning materials</p>
+        </div>
+        <div style="background: #f0f7ff; padding: 8px 16px; border-radius: 20px; font-weight: 600; color: #1565c0; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-book"></i> {{ enrollments|length }} Course{{ enrollments|length|pluralize }}
+        </div>
+    </div>
+
+    {% if enrollments %}
+        <div class="courses-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 25px; margin-bottom: 50px;">
+            {% for enrollment in enrollments %}
+            <div class="course-card" style="background: white; border-radius: 16px; padding: 30px; border: 1px solid #e2e8f0; transition: all 0.3s ease; height: 100%; box-shadow: 0 5px 15px rgba(108,142,164,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="font-size: 1.4rem; font-weight: 700; color: #2c3e50; margin: 0 0 8px 0;">
+                            {{ enrollment.course.name }}
+                        </h3>
+                        <div style="display: flex; align-items: center; gap: 10px; color: #5d6d7e; font-size: 0.9rem;">
+                            <span style="background: #f0f7ff; padding: 4px 10px; border-radius: 6px; font-weight: 600;">{{ enrollment.course.code }}</span>
+                            <span style="color: #a0aec0;">•</span>
+                            <span>Enrolled {{ enrollment.enrolled_date|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+                    <div style="background: #e8f5e9; color: #2e7d32; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-circle" style="font-size: 0.6rem;"></i> Active
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid #f1f5f9; padding-top: 25px;">
+                    <h4 style="font-size: 1.1rem; font-weight: 700; color: #2c3e50; margin: 0 0 20px 0;">
+                        <i class="fas fa-link" style="color: #6c8ea4; margin-right: 8px;"></i>Course Access
+                    </h4>
+                    
+                    <div class="course-actions" style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                        <a href="{% url 'student_materials' enrollment.course.id %}" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f8fafc; border-radius: 10px; text-decoration: none; color: #2c3e50; transition: all 0.2s ease; border: 1px solid #e2e8f0;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="background: linear-gradient(135deg, #e8f0f7, #f0f4f8); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-folder-open" style="font-size: 1.2rem; color: #6c8ea4;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 0.95rem;">Course Materials</div>
+                                    <div style="font-size: 0.85rem; color: #5d6d7e;">Lecture notes, resources, slides</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right" style="color: #6c8ea4; font-size: 1rem; transition: transform 0.3s ease;"></i>
+                        </a>
+
+                        <a href="{% url 'student_assignments' enrollment.course.id %}" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f8fafc; border-radius: 10px; text-decoration: none; color: #2c3e50; transition: all 0.2s ease; border: 1px solid #e2e8f0;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="background: linear-gradient(135deg, #e8f0f7, #f0f4f8); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-tasks" style="font-size: 1.2rem; color: #6c8ea4;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 0.95rem;">Assignments</div>
+                                    <div style="font-size: 0.85rem; color: #5d6d7e;">Submit and track assignments</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right" style="color: #6c8ea4; font-size: 1rem; transition: transform 0.3s ease;"></i>
+                        </a>
+
+                        <a href="{% url 'student_grades' enrollment.course.id %}" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f8fafc; border-radius: 10px; text-decoration: none; color: #2c3e50; transition: all 0.2s ease; border: 1px solid #e2e8f0;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="background: linear-gradient(135deg, #e8f0f7, #f0f4f8); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-chart-line" style="font-size: 1.2rem; color: #6c8ea4;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 0.95rem;">Grades & Progress</div>
+                                    <div style="font-size: 0.85rem; color: #5d6d7e;">View scores and performance</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right" style="color: #6c8ea4; font-size: 1rem; transition: transform 0.3s ease;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <style>
+            .course-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 15px 35px rgba(108, 142, 164, 0.15);
+                border-color: #6c8ea4;
+            }
+            
+            .course-actions a:hover {
+                background: #f0f7ff;
+                border-color: #6c8ea4;
+                transform: translateX(5px);
+            }
+            
+            .course-actions a:hover i.fa-arrow-right {
+                transform: translateX(5px);
+            }
+        </style>
+
+    {% else %}
+        
+        <div style="text-align: center; padding: 80px 20px;">
+            <div style="width: 100px; height: 100px; margin: 0 auto 25px; background: linear-gradient(135deg, #e8f0f7, #f0f4f8); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-book-open" style="font-size: 3rem; color: #6c8ea4; opacity: 0.5;"></i>
+            </div>
+            <h3 style="font-size: 1.8rem; font-weight: 700; color: #2c3e50; margin: 0 0 15px 0;">No Courses Enrolled</h3>
+            <p style="color: #5d6d7e; max-width: 500px; margin: 0 auto 30px; font-size: 1.1rem; line-height: 1.6;">
+                You haven't enrolled in any courses yet. Browse available courses to start your learning journey.
+            </p>
+            <a href="{% url 'course_list' %}" style="display: inline-flex; align-items: center; padding: 14px 32px; background: linear-gradient(135deg, #6c8ea4, #5a7a94); color: white; border-radius: 10px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+                <i class="fas fa-search" style="margin-right: 10px;"></i>Browse Available Courses
+            </a>
+        </div>
+    {% endif %}
+
+    
+    <div style="border-top: 1px solid #e2e8f0; padding-top: 30px; text-align: center;">
+        <form action="{% url 'logout' %}" method="post" style="margin: 0; display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn" 
+                    style="background: #f8fafc; color: #5d6d7e; border: 1px solid #e2e8f0; padding: 12px 28px; display: inline-flex; align-items: center; gap: 8px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Button styling to match base.html */
+    .btn {
+        padding: 10px 22px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        border: none;
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(108, 142, 164, 0.1);
+        background: #f1f5f9 !important;
+    }
+    
+    /* Browse button hover */
+    a[href*="course_list"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(108, 142, 164, 0.3);
+        background: linear-gradient(135deg, #5a7a94, #4a6a84) !important;
+    }
+</style>
+{% endblock %}

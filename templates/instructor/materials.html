@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Course Materials{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; margin: 30px auto; padding: 0 20px;">
+    
+    <div style="margin-bottom: 30px;">
+        <h1 style="font-size: 1.8rem; font-weight: 700; color: #2c3e50; margin: 0 0 5px 0;">
+            <i class="fas fa-folder-open" style="color: #6c8ea4; margin-right: 8px; font-size: 1.5rem;"></i>Materials – {{ course.name }}
+        </h1>
+        <p style="color: #5d6d7e; font-size: 0.95rem; margin: 0;">Upload and manage course materials for students</p>
+    </div>
+
+    
+    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(108,142,164,0.05); border: 1px solid #e2e8f0; margin-bottom: 30px;">
+        <h2 style="font-size: 1.3rem; font-weight: 700; color: #2c3e50; margin: 0 0 20px 0;">
+            <i class="fas fa-cloud-upload-alt" style="color: #6c8ea4; margin-right: 8px; font-size: 1.3rem;"></i>Upload New Material
+        </h2>
+
+        <form method="post" enctype="multipart/form-data" style="margin-bottom: 25px;">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div style="background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ffcdd2; font-size: 0.9rem;">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn--primary" style="padding: 10px 22px; font-size: 0.95rem; margin-top: 15px;">
+                <i class="fas fa-upload" style="font-size: 0.95rem;"></i> Upload Material
+            </button>
+        </form>
+    </div>
+
+    
+    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(108,142,164,0.05); border: 1px solid #e2e8f0;">
+        <h2 style="font-size: 1.3rem; font-weight: 700; color: #2c3e50; margin: 0 0 20px 0;">
+            <i class="fas fa-list" style="color: #6c8ea4; margin-right: 8px; font-size: 1.3rem;"></i>Uploaded Materials
+        </h2>
+
+        {% if materials %}
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                {% for material in materials %}
+                    <li style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-radius: 10px; padding: 15px; margin-bottom: 12px; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #e8f0f7, #f0f4f8); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                {% if material.get_material_type_display == "Document" %}
+                                    <i class="fas fa-file-pdf" style="color: #e74c3c; font-size: 1.2rem;"></i>
+                                {% elif material.get_material_type_display == "Video" %}
+                                    <i class="fas fa-video" style="color: #3498db; font-size: 1.2rem;"></i>
+                                {% elif material.get_material_type_display == "Presentation" %}
+                                    <i class="fas fa-file-powerpoint" style="color: #e67e22; font-size: 1.2rem;"></i>
+                                {% elif material.get_material_type_display == "Code" %}
+                                    <i class="fas fa-code" style="color: #9b59b6; font-size: 1.2rem;"></i>
+                                {% else %}
+                                    <i class="fas fa-file" style="color: #6c8ea4; font-size: 1.2rem;"></i>
+                                {% endif %}
+                            </div>
+                            
+                            
+                            <div style="flex: 1; min-width: 0;">
+                                <strong style="font-size: 1rem; color: #2c3e50; display: block; margin-bottom: 6px; font-weight: 600;">{{ material.title }}</strong>
+                                
+                                <div style="color: #5d6d7e; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; font-size: 0.85rem;">
+                                    <span style="display: flex; align-items: center; gap: 4px;">
+                                        <i class="fas fa-tag" style="font-size: 0.85rem;"></i>
+                                        {{ material.get_material_type_display }}
+                                    </span>
+                                    <span style="display: flex; align-items: center; gap: 4px;">
+                                        <i class="fas fa-calendar-alt" style="font-size: 0.85rem;"></i>
+                                        {{ material.uploaded_at|date:"M d, Y" }}
+                                    </span>
+                                </div>
+
+                                
+                                <div>
+                                    <a href="{{ material.file.url }}" target="_blank" 
+                                       style="display: inline-flex; align-items: center; gap: 6px; background: #e3f2fd; color: #1565c0; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; transition: all 0.3s ease;">
+                                        <i class="fas fa-download" style="font-size: 0.85rem;"></i> Download File
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            
+            <div style="text-align: center; padding: 30px 20px; color: #5d6d7e;">
+                <div style="width: 50px; height: 50px; margin: 0 auto 15px; background: linear-gradient(135deg, #e8f0f7, #f0f4f8); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-folder-open" style="font-size: 1.5rem; color: #6c8ea4; opacity: 0.5;"></i>
+                </div>
+                <p style="font-size: 1rem; margin-bottom: 5px;">No materials uploaded yet.</p>
+                <p style="color: #a0aec0; font-size: 0.9rem;">Upload your first material using the form above.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    
+    <div style="margin-top: 30px;">
+        <a href="{% url 'instructor_dashboard' %}" class="btn" 
+           style="background: #f8fafc; color: #5d6d7e; border: 1px solid #e2e8f0; padding: 10px 20px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease;">
+            <i class="fas fa-arrow-left" style="font-size: 0.9rem;"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Form styling - Smaller */
+    form p {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.9rem;
+    }
+    
+    input, textarea, select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #2c3e50;
+        background: #f8fafc;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: #6c8ea4;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(108, 142, 164, 0.15);
+    }
+    
+    /* Button styling - Smaller */
+    .btn {
+        padding: 8px 18px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: none;
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .btn--primary {
+        background: linear-gradient(135deg, #6c8ea4, #5a7a94);
+        color: white;
+        border: none;
+        box-shadow: 0 3px 10px rgba(108, 142, 164, 0.2);
+    }
+    
+    .btn--primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 142, 164, 0.3);
+        background: linear-gradient(135deg, #5a7a94, #4a6a84);
+    }
+    
+    /* Material item hover effect - Smaller */
+    li:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 142, 164, 0.15);
+        border-color: #8aa2b8;
+    }
+    
+    /* Download link hover - Smaller */
+    a[href*="download"]:hover {
+        background: #1565c0 !important;
+        color: white !important;
+        transform: translateY(-1px);
+    }
+    
+    /* Back button hover - Smaller */
+    a.btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(108, 142, 164, 0.1);
+        background: #f1f5f9 !important;
+    }
+</style>
+{% endblock %}

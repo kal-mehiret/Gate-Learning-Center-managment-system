@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Materials{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+    
+    <div style="margin-bottom: 30px;">
+        <h1 style="font-size: 1.8rem; font-weight: 700; color: #2c3e50; margin: 0 0 5px 0;">
+            <i class="fas fa-folder-open" style="color: #6c8ea4; margin-right: 8px; font-size: 1.5rem;"></i>Materials – {{ course.name }}
+        </h1>
+        <p style="color: #5d6d7e; font-size: 0.95rem; margin: 0;">Access learning resources for this course</p>
+    </div>
+
+  
+    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(108,142,164,0.05); border: 1px solid #e2e8f0; margin-bottom: 30px;">
+        {% if materials %}
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                {% for material in materials %}
+                    <li style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-radius: 10px; padding: 15px; margin-bottom: 12px; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #e8f0f7, #f0f4f8); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                {% if material.get_material_type_display == "Document" %}
+                                    <i class="fas fa-file-pdf" style="font-size: 1.2rem; color: #e74c3c;"></i>
+                                {% elif material.get_material_type_display == "Video" %}
+                                    <i class="fas fa-video" style="font-size: 1.2rem; color: #3498db;"></i>
+                                {% elif material.get_material_type_display == "Presentation" %}
+                                    <i class="fas fa-file-powerpoint" style="font-size: 1.2rem; color: #e67e22;"></i>
+                                {% elif material.get_material_type_display == "Code" %}
+                                    <i class="fas fa-code" style="font-size: 1.2rem; color: #9b59b6;"></i>
+                                {% else %}
+                                    <i class="fas fa-file" style="font-size: 1.2rem; color: #6c8ea4;"></i>
+                                {% endif %}
+                            </div>
+                            
+                            
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                    <strong style="font-size: 1rem; color: #2c3e50; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        {{ material.title }}
+                                    </strong>
+                                    <span style="background: #f0f7ff; color: #1565c0; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; flex-shrink: 0;">
+                                        {{ material.get_material_type_display }}
+                                    </span>
+                                </div>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: #5d6d7e; font-size: 0.8rem;">
+                                        <i class="fas fa-calendar-alt" style="margin-right: 4px;"></i>
+                                        {{ material.uploaded_at|date:"M d, Y" }}
+                                    </span>
+                                    
+                                    <!-- Download Button - Smaller -->
+                                    <a href="{{ material.file.url }}" target="_blank" download
+                                       style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #6c8ea4, #5a7a94); color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; transition: all 0.3s ease; flex-shrink: 0;">
+                                        <i class="fas fa-download" style="font-size: 0.85rem;"></i> Download
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            
+            <div style="text-align: center; padding: 40px 20px; color: #5d6d7e;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 15px; background: linear-gradient(135deg, #e8f0f7, #f0f4f8); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-folder-open" style="font-size: 1.8rem; color: #6c8ea4; opacity: 0.5;"></i>
+                </div>
+                <h3 style="font-size: 1.2rem; font-weight: 600; color: #2c3e50; margin: 0 0 8px 0;">No Materials Available</h3>
+                <p style="font-size: 0.9rem; max-width: 400px; margin: 0 auto;">No learning materials have been uploaded for this course yet.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    
+    <div style="text-align: center; border-top: 1px solid #e2e8f0; padding-top: 25px;">
+        <a href="{% url 'student_dashboard' %}" 
+           style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; color: #5d6d7e; border: 1px solid #e2e8f0; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease;">
+            <i class="fas fa-arrow-left" style="font-size: 0.9rem;"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Material item hover effect */
+    li:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 142, 164, 0.15);
+        border-color: #8aa2b8;
+    }
+    
+    /* Download button hover */
+    a[href*="download"]:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(108, 142, 164, 0.25);
+        background: linear-gradient(135deg, #5a7a94, #4a6a84) !important;
+    }
+    
+    /* Back button hover */
+    a[href*="student_dashboard"]:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(108, 142, 164, 0.1);
+        background: #f1f5f9 !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 15px !important;
+        }
+        
+        h1 {
+            font-size: 1.5rem !important;
+        }
+        
+        li > div {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+        }
+        
+        li > div > div:first-child {
+            margin-bottom: 10px !important;
+        }
+        
+        div[style*="display: flex; justify-content: space-between; align-items: center;"] {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 10px !important;
+        }
+        
+        a[href*="download"] {
+            width: 100% !important;
+            justify-content: center !important;
+        }
+    }
+</style>
+{% endblock %}

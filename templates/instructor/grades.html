@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %}Grades – {{ course.name }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 30px auto; padding: 0 20px;">
+  
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div>
+            <h1 style="font-size: 1.8rem; font-weight: 700; color: #2c3e50; margin: 0 0 5px 0;">Grades Management</h1>
+            <p style="color: #5d6d7e; font-size: 0.95rem; margin: 0;">
+                <i class="fas fa-book" style="margin-right: 6px; font-size: 0.95rem;"></i> {{ course.name }}
+                <span style="background: #f0f7ff; padding: 3px 8px; border-radius: 4px; margin-left: 8px; font-size: 0.8rem;">
+                    {{ course.code }}
+                </span>
+            </p>
+        </div>
+        <div style="background: #e8f5e9; color: #2e7d32; padding: 6px 12px; border-radius: 6px; font-weight: 600; display: flex; align-items: center; gap: 6px; font-size: 0.9rem;">
+            <i class="fas fa-users" style="font-size: 0.9rem;"></i>
+            {{ enrollments|length }} Student{{ enrollments|length|pluralize }}
+        </div>
+    </div>
+
+    {% if enrollments %}
+       
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(108,142,164,0.05); border: 1px solid #e2e8f0; margin-bottom: 25px;">
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                    <thead>
+                        <tr style="background: linear-gradient(135deg, #f8fafc, #f1f5f9);">
+                            <th style="padding: 14px 16px; text-align: left; font-weight: 600; color: #2c3e50; border-bottom: 2px solid #e2e8f0; font-size: 0.9rem;">
+                                <i class="fas fa-user" style="margin-right: 6px; font-size: 0.9rem;"></i> Student
+                            </th>
+                            <th style="padding: 14px 16px; text-align: left; font-weight: 600; color: #2c3e50; border-bottom: 2px solid #e2e8f0; font-size: 0.9rem;">
+                                <i class="fas fa-percentage" style="margin-right: 6px; font-size: 0.9rem;"></i> Score
+                            </th>
+                            <th style="padding: 14px 16px; text-align: left; font-weight: 600; color: #2c3e50; border-bottom: 2px solid #e2e8f0; font-size: 0.9rem;">
+                                <i class="fas fa-comment" style="margin-right: 6px; font-size: 0.9rem;"></i> Remark
+                            </th>
+                            <th style="padding: 14px 16px; text-align: left; font-weight: 600; color: #2c3e50; border-bottom: 2px solid #e2e8f0; font-size: 0.9rem;">
+                                <i class="fas fa-cog" style="margin-right: 6px; font-size: 0.9rem;"></i> Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enrollment in enrollments %}
+                        <tr style="border-bottom: 1px solid #f1f5f9; transition: all 0.2s ease;">
+                            <td style="padding: 16px; color: #2c3e50; font-weight: 500;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #e8f0f7, #f0f4f8); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-user-graduate" style="color: #6c8ea4; font-size: 0.9rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.95rem;">{{ enrollment.student.get_full_name|default:enrollment.student.username }}</div>
+                                        <div style="font-size: 0.8rem; color: #5d6d7e; margin-top: 2px;">@{{ enrollment.student.username }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 16px;">
+                                {% if enrollment.grade %}
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span style="font-weight: 700; font-size: 1rem; color: #2c3e50;">
+                                            {{ enrollment.grade.score }}
+                                        </span>
+                                        {% if enrollment.grade.score >= 80 %}
+                                            <span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                                A
+                                            </span>
+                                        {% elif enrollment.grade.score >= 70 %}
+                                            <span style="background: #e3f2fd; color: #1565c0; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                                B
+                                            </span>
+                                        {% elif enrollment.grade.score >= 60 %}
+                                            <span style="background: #fff3e0; color: #ef6c00; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                                C
+                                            </span>
+                                        {% elif enrollment.grade.score >= 50 %}
+                                            <span style="background: #ffebee; color: #c62828; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                                D
+                                            </span>
+                                        {% else %}
+                                            <span style="background: #f5f5f5; color: #616161; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                                F
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <span style="color: #5d6d7e; font-style: italic; font-size: 0.9rem;">Not graded</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 16px; color: #5d6d7e;">
+                                {% if enrollment.grade and enrollment.grade.remark %}
+                                    <div style="max-width: 250px; font-size: 0.9rem;">
+                                        {{ enrollment.grade.remark|truncatechars:80 }}
+                                    </div>
+                                {% else %}
+                                    <span style="color: #5d6d7e; font-style: italic; font-size: 0.9rem;">No remarks</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 16px;">
+                                <a href="{% url 'assign_grade' enrollment.student.id course.id %}" 
+                                   class="btn btn--primary" 
+                                   style="padding: 6px 12px; font-size: 0.85rem;">
+                                    <i class="fas fa-edit" style="font-size: 0.85rem;"></i> {% if enrollment.grade %}Edit{% else %}Assign{% endif %}
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px;">
+            <div style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-radius: 10px; padding: 15px; border: 1px solid #e2e8f0;">
+                <div style="color: #5d6d7e; font-size: 0.85rem; margin-bottom: 4px;">Total Students</div>
+                <div style="font-size: 1.8rem; font-weight: 700; color: #2c3e50;">{{ enrollments|length }}</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-radius: 10px; padding: 15px; border: 1px solid #e2e8f0;">
+                <div style="color: #5d6d7e; font-size: 0.85rem; margin-bottom: 4px;">Graded</div>
+                <div style="font-size: 1.8rem; font-weight: 700; color: #2c3e50;">
+                    {{ enrollments|length }} / {{ enrollments|length }}
+                </div>
+            </div>
+        </div>
+        
+    {% else %}
+        
+        <div style="text-align: center; padding: 50px 20px; background: white; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(108,142,164,0.05);">
+            <div style="font-size: 3rem; color: #e2e8f0; margin-bottom: 15px;">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3 style="font-size: 1.3rem; font-weight: 600; color: #2c3e50; margin: 0 0 10px 0;">No Students Enrolled</h3>
+            <p style="color: #5d6d7e; max-width: 500px; margin: 0 auto 25px; line-height: 1.5; font-size: 0.95rem;">
+                There are no students enrolled in this course yet. Students will appear here once they enroll.
+            </p>
+        </div>
+    {% endif %}
+
+    
+    <div style="border-top: 1px solid #e2e8f0; padding-top: 25px;">
+        <a href="{% url 'instructor_dashboard' %}" class="btn" 
+           style="background: #f8fafc; color: #5d6d7e; border: 1px solid #e2e8f0; padding: 10px 20px; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease;">
+            <i class="fas fa-arrow-left" style="font-size: 0.9rem;"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Table row hover effect */
+    tbody tr:hover {
+        background: #f8fafc;
+    }
+    
+    /* Consistent button styling - Smaller */
+    .btn {
+        padding: 8px 18px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: none;
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .btn--primary {
+        background: linear-gradient(135deg, #6c8ea4, #5a7a94);
+        color: white;
+        border: none;
+        box-shadow: 0 3px 10px rgba(108, 142, 164, 0.2);
+    }
+    
+    .btn--primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 142, 164, 0.3);
+        background: linear-gradient(135deg, #5a7a94, #4a6a84);
+    }
+    
+    /* Back button hover - Smaller */
+    a.btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(108, 142, 164, 0.1);
+        background: #f1f5f9 !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px 15px;
+        }
+        
+        table {
+            font-size: 0.85rem;
+            min-width: 600px !important;
+        }
+        
+        td, th {
+            padding: 12px 14px !important;
+        }
+        
+        div[style*="display: flex; justify-content: space-between;"] {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 15px !important;
+        }
+    }
+</style>
+{% endblock %}
+
+

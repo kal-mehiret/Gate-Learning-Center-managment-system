@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Instructor Dashboard{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px 0;">
+    <h1 style="margin-bottom: 30px;">Instructor Dashboard</h1>
+
+    {% if course %}
+        <div style="margin-bottom: 20px;">
+            <h2>{{ course.name }} ({{ course.code }})</h2>
+            <p>{{ course.description }}</p>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 30px;">
+            <a href="#" class="btn btn--primary">Materials</a>
+            <a href="#" class="btn btn--primary">Assignments</a>
+            <a href="#" class="btn btn--primary">Grades</a>
+            <a href="#" class="btn btn--primary">Schedule</a>
+        </div>
+    {% else %}
+        <p>No course assigned.</p>
+    {% endif %}
+
+    <a href="{% url 'logout' %}" class="btn btn--primary">
+        Logout
+    </a>
+</div>
+{% endblock %}
